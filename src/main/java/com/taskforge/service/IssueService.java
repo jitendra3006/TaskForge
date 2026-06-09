@@ -16,4 +16,6 @@ public interface IssueService {
     IssueResponseDto updateIssue(String id, IssueRequestDto request);
 
     void deleteIssue(String id);
+
+    IssueResponseDto updateIssueStatus(String id, String status);
 }

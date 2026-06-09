@@ -128,4 +128,28 @@ public IssueResponseDto updateIssue(
 
         issueRepository.delete(issue);
         }
+
+        @Override
+public IssueResponseDto updateIssueStatus(
+        String id,
+        String status) {
+
+    Issue issue = issueRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Issue not found"));
+
+    issue.setStatus(IssueStatus.valueOf(status.toUpperCase()));
+
+    Issue updatedIssue = issueRepository.save(issue);
+
+    return IssueResponseDto.builder()
+            .id(updatedIssue.getId())
+            .title(updatedIssue.getTitle())
+            .description(updatedIssue.getDescription())
+            .status(updatedIssue.getStatus())
+            .priority(updatedIssue.getPriority())
+            .assignedUserId(updatedIssue.getAssignedUserId())
+            .createdBy(updatedIssue.getCreatedBy())
+            .build();
+}
 }

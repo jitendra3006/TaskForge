@@ -54,6 +54,16 @@ public class IssueController {
         );
     }
 
+    @PatchMapping("/{id}/status")
+public ResponseEntity<IssueResponseDto> updateIssueStatus(
+        @PathVariable String id,
+        @RequestParam String status) {
+
+    return ResponseEntity.ok(
+            issueService.updateIssueStatus(id, status)
+    );
+}
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteIssue(
         @PathVariable String id) {
