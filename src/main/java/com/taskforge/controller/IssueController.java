@@ -5,6 +5,9 @@ import com.taskforge.dto.IssueResponseDto;
 import com.taskforge.service.IssueService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,4 +26,43 @@ public class IssueController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(issueService.createIssue(request));
     }
+
+    @GetMapping
+    public ResponseEntity<List<IssueResponseDto>> getAllIssues() {
+        return ResponseEntity.ok(
+            issueService.getAllIssues()
+    );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<IssueResponseDto> getIssueById(
+        @PathVariable String id) {
+
+    return ResponseEntity.ok(
+            issueService.getIssueById(id)
+    );
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<IssueResponseDto> updateIssue(
+        @PathVariable String id,
+        @Valid @RequestBody IssueRequestDto request) {
+
+    return ResponseEntity.ok(
+            issueService.updateIssue(id, request)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteIssue(
+        @PathVariable String id) {
+
+        issueService.deleteIssue(id);
+
+    return ResponseEntity.ok(
+            "Issue deleted successfully"
+         );
+    }
+
 }

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,4 +54,78 @@ public class IssueServiceImpl implements IssueService {
                 .createdBy(savedIssue.getCreatedBy())
                 .build();
     }
+
+    @Override
+public List<IssueResponseDto> getAllIssues() {
+
+    return issueRepository.findAll()
+            .stream()
+            .map(issue -> IssueResponseDto.builder()
+                    .id(issue.getId())
+                    .title(issue.getTitle())
+                    .description(issue.getDescription())
+                    .status(issue.getStatus())
+                    .priority(issue.getPriority())
+                    .assignedUserId(issue.getAssignedUserId())
+                    .createdBy(issue.getCreatedBy())
+                    .build())
+            .collect(Collectors.toList());
+        }
+
+        @Override
+        public IssueResponseDto getIssueById(String id) {
+
+            Issue issue = issueRepository.findById(id)
+                .orElseThrow(() ->
+                    new RuntimeException("Issue not found"));
+
+    return IssueResponseDto.builder()
+            .id(issue.getId())
+            .title(issue.getTitle())
+            .description(issue.getDescription())
+            .status(issue.getStatus())
+            .priority(issue.getPriority())
+            .assignedUserId(issue.getAssignedUserId())
+            .createdBy(issue.getCreatedBy())
+            .build();
+        }
+
+
+        @Override
+public IssueResponseDto updateIssue(
+        String id,
+        IssueRequestDto request) {
+
+    Issue issue = issueRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Issue not found"));
+
+    issue.setTitle(request.getTitle());
+    issue.setDescription(request.getDescription());
+    issue.setPriority(request.getPriority());
+    issue.setAssignedUserId(request.getAssignedUserId());
+
+    Issue updatedIssue = issueRepository.save(issue);
+
+    return IssueResponseDto.builder()
+            .id(updatedIssue.getId())
+            .title(updatedIssue.getTitle())
+            .description(updatedIssue.getDescription())
+            .status(updatedIssue.getStatus())
+            .priority(updatedIssue.getPriority())
+            .assignedUserId(updatedIssue.getAssignedUserId())
+            .createdBy(updatedIssue.getCreatedBy())
+            .build();
+}
+
+
+        @Override
+        public void deleteIssue(String id) {
+
+        Issue issue = issueRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Issue not found"));
+
+        issueRepository.delete(issue);
+        }
 }
