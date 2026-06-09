@@ -75,4 +75,14 @@ public ResponseEntity<IssueResponseDto> updateIssueStatus(
          );
     }
 
+    @PatchMapping("/{issueId}/assign")
+public ResponseEntity<IssueResponseDto> assignIssue(
+        @PathVariable String issueId,
+        @RequestParam String userId) {
+
+    return ResponseEntity.ok(
+            issueService.assignIssue(issueId, userId)
+    );
+}
+
 }

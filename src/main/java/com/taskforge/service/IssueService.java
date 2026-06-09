@@ -5,6 +5,7 @@ import java.util.List;
 import com.taskforge.dto.IssueRequestDto;
 import com.taskforge.dto.IssueResponseDto;
 
+
 public interface IssueService {
 
     IssueResponseDto createIssue(IssueRequestDto request);
@@ -18,4 +19,6 @@ public interface IssueService {
     void deleteIssue(String id);
 
     IssueResponseDto updateIssueStatus(String id, String status);
+
+    IssueResponseDto assignIssue(String issueId, String userId);
 }

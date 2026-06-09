@@ -152,4 +152,32 @@ public IssueResponseDto updateIssueStatus(
             .createdBy(updatedIssue.getCreatedBy())
             .build();
 }
+
+@Override
+public IssueResponseDto assignIssue(
+        String issueId,
+        String userId) {
+
+    Issue issue = issueRepository.findById(issueId)
+            .orElseThrow(() ->
+                    new RuntimeException("Issue not found"));
+
+    User user = userRepository.findById(userId)
+            .orElseThrow(() ->
+                    new RuntimeException("User not found"));
+
+    issue.setAssignedUserId(user.getId());
+
+    Issue updatedIssue = issueRepository.save(issue);
+
+    return IssueResponseDto.builder()
+            .id(updatedIssue.getId())
+            .title(updatedIssue.getTitle())
+            .description(updatedIssue.getDescription())
+            .status(updatedIssue.getStatus())
+            .priority(updatedIssue.getPriority())
+            .assignedUserId(updatedIssue.getAssignedUserId())
+            .createdBy(updatedIssue.getCreatedBy())
+            .build();
+}
 }
